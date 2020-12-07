@@ -16,6 +16,8 @@ namespace BackendSimulator
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,6 +28,36 @@ namespace BackendSimulator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder
+                                      .WithOrigins("http://localhost")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod()
+                                      .SetIsOriginAllowed((host) => true)
+                                                          ;
+                                  });
+            });*/
+
+            /*services.AddCors(c =>
+            {
+                c.AddPolicy(MyAllowSpecificOrigins, options => options.AllowAnyOrigin());
+            }); */
+
+            /*services.AddCors(options => {
+                options.AddPolicy("mypolicy", builder => builder
+                 .WithOrigins("http://localhost:3000/")
+                 .SetIsOriginAllowed((host) => true)
+                 .AllowAnyMethod()
+                 .AllowAnyHeader());
+            });*/
+            services.AddCors();
+
+            //services.AddMvc();
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -45,6 +77,27 @@ namespace BackendSimulator
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.UseCors(options => options.WithOrigins("http://localhost:3000"));
+            //app.UseCors(options => options.AllowAnyOrigin());
+
+            /*app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials*/
+            //app.UseCors("CorsPolicy");
+            /*app.UseCors(builder =>
+            {
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });*/
+
+
+            //app.UseCors(MyAllowSpecificOrigins);
+            //app.UseCors(options => options.WithOrigins("http://localhost:3000"));
+            app.UseCors(options => options.AllowAnyOrigin());
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
@@ -60,6 +113,7 @@ namespace BackendSimulator
             }
 
             //app.UseHttpsRedirection();
+
 
             app.UseRouting();
 
