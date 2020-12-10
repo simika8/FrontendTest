@@ -17,12 +17,12 @@ namespace BackendSimulator
 
         // GET: api/Products
         [HttpGet()]
-        //public async Task<ActionResult<(IEnumerable<Product> Data, string Cursor)>> GetProducts(string keyword, int skip, int take, int minTimeoutMs, int maxTimeoutMs)
-        public async Task<ActionResult<ApiResultWithPaging<IEnumerable<Product>>>> GetProducts(string keyword, string? cursor, int take = 1, int minTimeoutMs = 1000, int maxTimeoutMs = 1000)
+        //public async Task<ActionResult<(IEnumerable<Product> Data, string Cursor)>> GetProducts(string keyword, int skip, int take, int minTimeMs, int maxTimeMs)
+        public async Task<ActionResult<ApiResultWithPaging<IEnumerable<Product>>>> GetProducts(string keyword, string? cursor, int take = 1, int minTimeMs = 1000, int maxTimeMs = 1000)
         {
             var rndTime = new Random(keyword.GetHashCode());
             var d = rndTime.NextDouble();
-            var timeoutMs = (int)(Math.Pow(d, 4) * (maxTimeoutMs - minTimeoutMs) + minTimeoutMs);
+            var timeMs = (int)(Math.Pow(d, 4) * (maxTimeMs - minTimeMs) + minTimeMs);
 
             using var md5 = MD5.Create();
 
@@ -61,8 +61,8 @@ namespace BackendSimulator
             }
             sw.Stop();
 
-            if (timeoutMs - (int)sw.ElapsedMilliseconds > 0)
-                await Task.Delay(timeoutMs - (int)sw.ElapsedMilliseconds);
+            if (timeMs - (int)sw.ElapsedMilliseconds > 0)
+                await Task.Delay(timeMs - (int)sw.ElapsedMilliseconds);
             //var a = new { dataasd: res, cursor:  "asdf" };
             var res2 = new ApiResultWithPaging<IEnumerable<Product>>()
             {
@@ -70,6 +70,7 @@ namespace BackendSimulator
                 Cursor = (res.Count > 0 && res.Count == take)
                     ? System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(res.Last().Name)) 
                     : "",
+                Keyword = keyword,
             };
             return res2;
         }

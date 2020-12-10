@@ -14,16 +14,16 @@ namespace BackendSimulator
     public class PicturesController : ControllerBase
     {
 
-        // GET: api/Pictures?productId=3fa85f64-5717-4562-b3fc-2c963f66afa6&minTimeoutMs=100&maxTimeoutMs=3000
+        // GET: api/Pictures?productId=3fa85f64-5717-4562-b3fc-2c963f66afa6&minTimeMs=100&maxTimeMs=3000
         [HttpGet()]
-        public async Task<ActionResult> GetPictures(Guid productId, int minTimeoutMs=100, int maxTimeoutMs=3000)
+        public async Task<ActionResult> GetPictures(Guid productId, int minTimeMs=100, int maxTimeMs=3000)
         {
 
             var rndTime = new Random(productId.GetHashCode());
-            var timeoutMs = (int)(Math.Pow(rndTime.NextDouble(), 4) * (maxTimeoutMs - minTimeoutMs) + minTimeoutMs);
+            var timeMs = (int)(Math.Pow(rndTime.NextDouble(), 4) * (maxTimeMs - minTimeMs) + minTimeMs);
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            using var bmp = new System.Drawing.Bitmap(150, 150);
+            using var bmp = new System.Drawing.Bitmap(100, 100);
             using var g = Graphics.FromImage(bmp);
 
             var rnd = new Random(productId.GetHashCode());
@@ -33,12 +33,12 @@ namespace BackendSimulator
             g.Clear(bgcolor);
 
             Pen pen = new Pen(Color.FromArgb((byte)rnd.Next(0, 128), (byte)rnd.Next(0, 128), (byte)rnd.Next(0, 128)));
-            pen.Width = 3;
+            pen.Width = 10;
 
             //Draw red rectangle to go behind cross
-            Rectangle rect = new Rectangle(30, 30, 90, 90);
+            Rectangle rect = new Rectangle(20, 20, 60, 60);
             g.FillRectangle(new SolidBrush(Color.FromArgb((byte)rnd.Next(0, 128), (byte)rnd.Next(0, 128), (byte)rnd.Next(0, 128))), rect);
-            g.DrawEllipse(pen, 20, 20, 110, 110);
+            g.DrawEllipse(pen, 20, 20, 60, 60);
 
 
 
@@ -49,10 +49,10 @@ namespace BackendSimulator
             var res = File(memStream.ToArray(), "image/jpeg");
             sw.Stop();
 
-            if (timeoutMs - (int)sw.ElapsedMilliseconds > 0)
-                await Task.Delay(timeoutMs - (int)sw.ElapsedMilliseconds);//*/
-            /*if (timeoutMs - (int)sw.ElapsedMilliseconds > 0)
-                System.Threading.Thread.Sleep(timeoutMs - (int)sw.ElapsedMilliseconds);//*/
+            if (timeMs - (int)sw.ElapsedMilliseconds > 0)
+                await Task.Delay(timeMs - (int)sw.ElapsedMilliseconds);//*/
+            /*if (timeMs - (int)sw.ElapsedMilliseconds > 0)
+                System.Threading.Thread.Sleep(timeMs - (int)sw.ElapsedMilliseconds);//*/
 
             return res;
 
