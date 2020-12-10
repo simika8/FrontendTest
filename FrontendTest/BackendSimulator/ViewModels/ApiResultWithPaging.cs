@@ -9,7 +9,7 @@ namespace BackendSimulator
     {
         public TData? Data { get; set; }
         public string Cursor { get; set; } = null!;
-        public string Keyword { get; set; } = null!;
+        //public string Keyword { get; set; } = null!;
     }
 
 

@@ -70,7 +70,7 @@ namespace BackendSimulator
                 Cursor = (res.Count > 0 && res.Count == take)
                     ? System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(res.Last().Name)) 
                     : "",
-                Keyword = keyword,
+                //Keyword = keyword,
             };
             return res2;
         }
