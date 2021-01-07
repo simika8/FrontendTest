@@ -33,7 +33,7 @@ namespace BackendSimulator
             {
                 var sales = new Sales()
                 {
-                    Month = "2020.0" + m.ToString(),
+                    Month = "2020." + m.ToString("00"),
                     Quantity = rnd.Next(1, 20),
                 };
                 res.Add(sales);
