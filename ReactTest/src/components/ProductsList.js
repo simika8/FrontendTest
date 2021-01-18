@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import axios from 'axios'
 import './search.css';
 
 import SalesList from './SalesList';
@@ -162,7 +162,11 @@ export default class ProductsList extends React.Component {
         var cur = this.state.cursor;
         var prods = this.state.products;
         if (prods.length > 0 && cur >= 0 && cur < prods.length) {
-            
+            if (prodid !== prods[cur].id) {
+                console.log("cancel saleslist");
+                //queryClient.cancelQueries("Sales"+prodid);
+            }
+
             prodid = prods[cur].id;
         }
 

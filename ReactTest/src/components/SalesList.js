@@ -9,19 +9,33 @@ export default function SalesList(props) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <FetchData prodid = {props.prodid}/>
+            <FetchData prodid={props.prodid} />
         </QueryClientProvider>
     )
 }
 
 function FetchData(props) {
 
-    const { isLoading, error, data } = useQuery('Sales'+props.prodid, () =>
+    /*const { isLoading, error, data } = useQuery('Sales'+props.prodid, () =>
         axios.get("https://localhost:44339/api/Sales"
             ,{params: {productid: props.prodid, minTimeMs: 1000, maxTimeMs: 1000},}
             ,{timeout: 10000}
             )
-    );
+    );*/
+    const { isLoading, error, data } = useQuery("Sales" + props.prodid, () => {
+
+        const source = axios.CancelToken.source();
+
+        const promise = axios.get("https://localhost:44339/api/Sales"
+            , { params: { productid: props.prodid, minTimeMs: 1000, maxTimeMs: 1000 }, cancelToken: source.token, }
+            , { timeout: 5000 }
+        );
+        promise.cancel = () => {
+            source.cancel('Query was cancelled by React Query');
+        }
+        return promise;
+
+    });
 
     if (isLoading) return 'Fogyás adat betöltése...';
 
@@ -29,12 +43,12 @@ function FetchData(props) {
     return RenderData(data.data)
 }
 
-function RenderData(data){
-    var sales = [{month: "", quantity: 0}, {month: "", quantity: 0}, {month: "", quantity: 0}];
+function RenderData(data) {
+    var sales = [{ month: "", quantity: 0 }, { month: "", quantity: 0 }, { month: "", quantity: 0 }];
     if (data)
         sales = data;
 
-        
+
     return (
         <div>
             <table className="table-striped">
@@ -48,7 +62,7 @@ function RenderData(data){
                     {
                         sales.map(function (currentSale, i) {
                             return (
-                                <tr key = {i}>
+                                <tr key={i}>
                                     <td>{currentSale.month}</td>
                                     <td>{currentSale.quantity}</td>
                                 </tr>
