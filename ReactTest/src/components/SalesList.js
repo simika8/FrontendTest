@@ -15,13 +15,6 @@ export default function SalesList(props) {
 }
 
 function FetchData(props) {
-
-    /*const { isLoading, error, data } = useQuery('Sales'+props.prodid, () =>
-        axios.get("https://localhost:44339/api/Sales"
-            ,{params: {productid: props.prodid, minTimeMs: 1000, maxTimeMs: 1000},}
-            ,{timeout: 10000}
-            )
-    );*/
     const { isLoading, error, data } = useQuery("Sales" + props.prodid, () => {
 
         const source = axios.CancelToken.source();
