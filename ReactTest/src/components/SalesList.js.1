@@ -1,0 +1,70 @@
+import React from 'react';
+//import { createStore } from 'redux'
+import './search.css';
+//import { connect } from "react-redux";
+
+export default class SalesList extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            sales: [{month: "", quantity: 0}, {month: "", quantity: 0}, {month: "", quantity: 0}],
+        };
+    }
+
+
+    render() {
+        console.log("SalesList.render");
+        if (this.props.prodid)
+        {
+            /*axios.get("https://localhost:44339/api/Sales", { params: {
+                productid: this.props.prodid,
+                minTimeMs: 300,
+                maxTimeMs: 300
+                } 
+            })
+            .then(response => 
+                {
+                    //ha nem változott sem a szűrési feltétel (nem írtuk át közben az ablakban, amíg a válasz ideért)
+                    if (response.config.params.productid === this.props.prodid) {
+                        console.log(response.config.params.productid + " = " + this.props.prodid);
+                        this.setState({ sales: response.data });
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });/**/
+        }
+
+        return (
+            <div>
+                <table className="table-striped">
+                    <thead>
+                        <tr>
+                            <th>Hónap</th>
+                            <th>Fogyás</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.sales.map(function (currentSale, i) {
+                                return (
+                                    <tr key = {i}>
+                                        <td>{currentSale.month}</td>
+                                        <td>{currentSale.quantity}</td>
+                                    </tr>
+                                );
+                            })
+                        }
+                        <tr>
+                            <td>{this.props.prodid}</td>
+                            <td>asdf</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+    
+
+}

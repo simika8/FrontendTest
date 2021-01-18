@@ -1,0 +1,121 @@
+import React from 'react';
+import axios from 'axios';
+
+import './search.css';
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+
+const queryClient = new QueryClient();
+
+export default function SalesList() {
+
+    /*constructor(props) {
+        super(props);
+
+        this.state = {
+            sales: [{month: "", quantity: 0}, {month: "", quantity: 0}, {month: "", quantity: 0}],
+            prodid: null,
+            querying: false,
+        };
+    }*/
+
+    /*const { isLoading, error, response } = useQuery('SalesData', () =>
+        axios.get("https://localhost:44339/api/Sales", {
+            params: {
+                productid: this.props.prodid,
+                minTimeMs: 1000,
+                maxTimeMs: 1000
+            },
+            headers: {
+                //"Cache-Control": "no-cache",
+                "content-type": "text/plain",
+            }
+        }, { timeout: 10000 }
+        )
+    )*/
+    const { isLoading, error, data } = useQuery('repoData', () =>
+     fetch('https://api.github.com/repos/tannerlinsley/react-query').then(res =>
+       res.json()
+     )
+    )
+
+
+    if (isLoading) return 'Loading...';
+ 
+    if (error) return 'An error has occurred: ' + error.message;
+
+    return data;
+
+/*
+    var needrefresh = (this.props.prodid !== this.state.prodid)
+    if (this.props.prodid && (this.props.prodid !== this.state.prodid)) {
+
+
+        //            axios.get("http://localhost:57065/api/Sales", { params: {
+        //axios.defaults.baseURL ="https://localhost:44339";
+        console.log("axios.get: https://localhost:44339/api/Sales : " + this.props.prodid);
+        axios.get("https://localhost:44339/api/Sales", {
+            params: {
+                productid: this.props.prodid,
+                minTimeMs: 1000,
+                maxTimeMs: 1000
+            },
+            headers: {
+                //"Cache-Control": "no-cache",
+                "content-type": "text/plain",
+            }
+        }, { timeout: 10000 }
+        )
+
+            .then(response => {
+                //ha nem változott sem a szűrési feltétel (nem írtuk át közben az ablakban, amíg a válasz ideért)
+                console.log("axios response x: " + JSON.stringify(response));
+                if (response.config.params.productid === this.props.prodid) {
+                    //getData();
+                    //setSalesRun(response.data);
+
+                    var notchanged = JSON.stringify(this.state.sales) === JSON.stringify(response.data);
+                    //var notchanged = this.state.sales !== response.data;
+                    if (!notchanged) {
+                        console.log("sales changed");
+                        this.setState({ sales: response.data, prodid: this.props.prodid });
+                    }
+                }
+            })
+            .catch(function (error) {
+                console.log("axios error: " + error);
+            });
+        console.log("SalesList.render afterfut: " + this.props.prodid);
+        //
+    }*/
+
+    return (
+        <QueryClientProvider client={queryClient}>
+            <div>
+                <table className="table-striped">
+                    <thead>
+                        <tr>
+                            <th>Hónap</th>
+                            <th>Fogyás</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.sales.map(function (currentSale, i) {
+                                return (
+                                    <tr key={i}>
+                                        <td>{currentSale.month}</td>
+                                        <td>{currentSale.quantity}</td>
+                                    </tr>
+                                );
+                            })
+                        }
+                        <tr>
+                            <td>{this.props.prodid}</td>
+                            <td>asdf</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </QueryClientProvider>
+    )
+}
