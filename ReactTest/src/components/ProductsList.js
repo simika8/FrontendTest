@@ -3,6 +3,7 @@ import axios from 'axios'
 import './search.css';
 
 import SalesList from './SalesList';
+import * as Constants from './constants';
 
 class Product extends React.PureComponent {
     render() {
@@ -50,21 +51,16 @@ export default class ProductsList extends React.Component {
         this.cursorRef = React.createRef();
         this.gridref = React.createRef();
         
-        //const queryString = require('query-string');
-        //var x = this.props.location.search.parse()
-        //console.log(this.props);
     }
 
     componentDidMount() {
         this.refilter(this.state.searchfilter);
+        this.nameInput.focus(); 
     }
 
 
     getprods(searchfilter, pageCursor){
-        //var cur = pageCursor?"&cursor="+ pageCursor:"";
-        //return axios.get("https://localhost:44339/api/Products?keyword=" + searchfilter + cur + "&take="+ this.state.productsTake+ "&minTimeMs=" + this.state.productsMinTimeMs + "&maxTimeMs=" + this.state.productsMaxTimeMs);
-        //console.log("axios.get: https://localhost:44339/api/Products : "  + searchfilter);
-        return axios.get("https://localhost:44339/api/Products", { params: {
+        return axios.get(Constants.ApiBaseUrl  + "/api/Products", { params: {
                 keyword: searchfilter,
                 cursor: pageCursor,
                 take:this.state.productsTake,
@@ -126,7 +122,7 @@ export default class ProductsList extends React.Component {
         let picturesMaxTimeMs = this.state.picturesMaxTimeMs;
 
         return this.state.products.map(function (currentProduct, i) {
-            return <Product product={currentProduct} key={currentProduct.id} number={i} cursorRef={cur === i ? cursorRef : null} imgsrc = {"https://localhost:44339/api/Pictures?productId=" + currentProduct.id + "&minTimeMs=" + picturesMinTimeMs + "&maxTimeMs=" + picturesMaxTimeMs}/>;
+            return <Product product={currentProduct} key={currentProduct.id} number={i} cursorRef={cur === i ? cursorRef : null} imgsrc = {Constants.ApiBaseUrl + "/api/Pictures?productId=" + currentProduct.id + "&minTimeMs=" + picturesMinTimeMs + "&maxTimeMs=" + picturesMaxTimeMs}/>;
         });
     }
 
@@ -172,7 +168,7 @@ export default class ProductsList extends React.Component {
 
         return (
             <div className="ac_results">
-                <input className="search" placeholder="Keresés" value={this.state.searchfilter} onChange={(e) => {this.refilter(e.target.value);}} onKeyDown={this.handleKeyDown} />
+                <input ref={(input) => { this.nameInput = input; }}  className="search" placeholder="Keresés" value={this.state.searchfilter} onChange={(e) => {this.refilter(e.target.value);}} onKeyDown={this.handleKeyDown} />
                 <div className="tbodyscroll" ref={this.gridref}>
                     <table className="table table-striped">
                         <thead>
@@ -189,7 +185,7 @@ export default class ProductsList extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                <SalesList prodid = {prodid}/>
+                <SalesList prodid = {prodid} minTimeMs= {this.state.salesMinTimeMs} maxTimeMs= {this.state.salesMaxTimeMs}/>
             </div>
         )
     }

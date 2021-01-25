@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import axios from 'axios';
+import * as Constants from './constants';
 
 const queryClient = new QueryClient()
 
@@ -9,7 +10,7 @@ export default function SalesList(props) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <FetchData prodid={props.prodid} />
+            <FetchData prodid={props.prodid} minTimeMs= {props.minTimeMs} maxTimeMs= {props.maxTimeMs}/>
         </QueryClientProvider>
     )
 }
@@ -19,8 +20,8 @@ function FetchData(props) {
 
         const source = axios.CancelToken.source();
 
-        const promise = axios.get("https://localhost:44339/api/Sales"
-            , { params: { productid: props.prodid, minTimeMs: 1000, maxTimeMs: 1000 }, cancelToken: source.token, }
+        const promise = axios.get(Constants.ApiBaseUrl + "/api/Sales"
+            , { params: { productid: props.prodid, minTimeMs: props.minTimeMs, maxTimeMs: props.maxTimeMs }, cancelToken: source.token, }
             , { timeout: 5000 }
         );
         promise.cancel = () => {

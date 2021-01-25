@@ -97,7 +97,6 @@ namespace BackendSimulator
 
             //app.UseCors(MyAllowSpecificOrigins);
             //app.UseCors(options => options.WithOrigins("http://localhost:3000"));
-            app.UseCors(options => options.AllowAnyOrigin());
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
@@ -105,6 +104,7 @@ namespace BackendSimulator
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cikktörzs API V1");
+                c.RoutePrefix = string.Empty;
             });
 
             if (env.IsDevelopment())
@@ -116,6 +116,7 @@ namespace BackendSimulator
 
 
             app.UseRouting();
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseAuthorization();
 
