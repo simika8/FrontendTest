@@ -1,0 +1,113 @@
+﻿@page "/productslist"
+@inject HttpClient Http
+@using BackendSimulator
+
+<input class="Input2" id="Input2" type="search"/>
+<input class="Input" id="Input" type="search" @bind-value="Filter" @bind-value:event="oninput" placeholder="search" @onkeydown="KeyboardEventHandler" />
+@System.Text.Json.JsonSerializer.Serialize(_filterLog);
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+    @if (string.IsNullOrWhiteSpace(Filter))
+    {
+        <div id="Loaded"></div>
+    }
+}
+else
+{
+    //<input ref=@{(input) => { this.nameInput = input; }}  className="search" placeholder="Keresés" value={this.state.searchfilter} onChange={(e) => {this.refilter(e.target.value);}} onKeyDown={this.handleKeyDown} />
+
+    <div className="tbodyscroll">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Kép</th>
+                    <th>Név</th>
+                    <th>Ár</th>
+                    <th>Készlet</th>
+                    <th>Leírás</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    var actLineNumber = 0;
+                    foreach (var product in forecasts.Data)
+                    {
+                        var cursorRef = actLineNumber == cursor;
+                        var imgsrc = ApiBaseUrl + "/api/Pictures?productId=" + product.Id + "&minTimeMs=50&maxTimeMs=3000";
+                        <tr class=@(cursorRef ? "cursor" : null)>
+                            <td>
+                                <div className="pic100">
+                                    <img src=@imgsrc alt=@product.Name />
+                                </div>
+                            </td>
+                            <td>@product.Name</td>
+                            <td>@product.Price</td>
+                            <td>@product.Stock</td>
+                            <td>@product.Description</td>
+                        </tr>
+
+                        actLineNumber++;
+                    }
+                }
+            </tbody>
+        </table>
+        <div id="Loaded"></div>
+    </div>
+}
+
+@code {
+    private ApiResultWithPaging<IEnumerable<Product>> forecasts;
+    private string ApiBaseUrl = "https://backendsimulator.azurewebsites.net";
+
+    private string _filter;
+    private List<string> _filterLog = new List<string>();
+
+    public string Filter { get { return _filter; } set { _filter = value; ReQuery(); } }
+
+    private int cursor = -1;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReQuery();
+    }
+
+    private void KeyboardEventHandler(KeyboardEventArgs args)
+    {
+        var KeyPressed = "Key Pressed is " + args.Key;
+        var EventInfo = "Event Type " + args.Type;
+        if (args.Key == "ArrowDown")
+            cursor++;
+        if (args.Key == "ArrowUp")
+            cursor--;
+
+    }
+
+    private async Task ReQuery()
+    {
+        forecasts = null;
+        cursor = -1;
+        StateHasChanged();
+        if (string.IsNullOrWhiteSpace(Filter))
+        {
+        }
+        else
+        {
+            //forecasts = await Http.GetFromJsonAsync<ApiResultWithPaging<IEnumerable<Product>>>(ApiBaseUrl + "/api/Products?keyword=" + Filter + "&take=8&minTimeMs=1&maxTimeMs=100");
+            forecasts = await Http.GetFromJsonAsync<ApiResultWithPaging<IEnumerable<Product>>>(ApiBaseUrl + "/api/Products?keyword=" + Filter + "&take=8&minTimeMs=0&maxTimeMs=00");
+            cursor = -1;
+            _filterLog.Add(Filter);
+            StateHasChanged();
+
+            //using var f = System.IO.File.AppendText(@"c:\Develop\Puppeteer\log.txt");
+            //f.WriteLine(Filter);
+            //System.IO.File.WriteAllText($@"c:\Develop\Puppeteer\log{new Guid().ToString()}.txt", Filter);
+
+        }
+
+    }
+
+}

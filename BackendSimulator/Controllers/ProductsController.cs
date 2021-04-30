@@ -24,41 +24,15 @@ namespace BackendSimulator
             var d = rndTime.NextDouble();
             var timeMs = (int)(Math.Pow(d, 4) * (maxTimeMs - minTimeMs) + minTimeMs);
 
-            using var md5 = MD5.Create();
 
             //var firstId = ProductNameNumber.ProductNameToNumber("Aaachl", 1, 200000);
 
-            var cursorDecoded = cursor == null ? "" : System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(cursor));
-            var range = ProductNameNumber.GetVisibleProductNumberRange(keyword, cursorDecoded, 1, 200000);
 
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            var res = new List<Product>();
-            for (var x = 0; x < 1; x++)
-            {
-                res.Clear();
 
+            var res = RandomProduct.Generate(keyword, cursor, take);
 
-                for (var productNumber = range.first; productNumber <= Math.Min(range.first + take -1, range.last); productNumber++)
-                {
-                    var rnd = new Random(productNumber);
-                    var name = ProductNameNumber.NumberToProductName(productNumber, 1, 200000);
-                    if (name != null)
-                    {
-                        var id = new Guid(md5.ComputeHash(Encoding.Default.GetBytes(name)));//cikknévből generált guid. Nem jó megoldás, de teszthez megfelel
-                        var p = new Product()
-                        {
-                            //Id = Guid.NewGuid(),
-                            Id = id,
-                            Name = name,
-                            Price = rnd.Next(5000) + 100,
-                            Stock = rnd.Next(2) * (rnd.Next(5) * rnd.Next(5) + rnd.Next(5)),
-                            Description = ProductNameNumber.RandomSentences(rnd.Next(5, 10), rnd.Next(3, 10), rnd),
-                        };
-                        res.Add(p);
-                    }
-                }
-            }
             sw.Stop();
 
             if (timeMs - (int)sw.ElapsedMilliseconds > 0)

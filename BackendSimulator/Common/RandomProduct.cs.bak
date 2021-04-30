@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BackendSimulator
 {
-    public static class ProductNameNumber
+    public static class RandomProduct
     {
         private static readonly char[] BaseChars =
          "abcdefghijklmnopqrstuvwxyz".ToCharArray();
@@ -16,6 +17,45 @@ namespace BackendSimulator
         private static int FirstWordLength = 6;
         private static int MinProductNameValue = (int)BaseToLong("".PadLeft(FirstWordLength, 'a'));
         private static int MaxProductNameValue = (int)BaseToLong("".PadLeft(FirstWordLength, 'z'));
+
+
+        public static List<Product> Generate(string keyword, string? cursor, int take)
+        {
+            var res = new List<Product>();
+
+            using var md5 = System.Security.Cryptography.MD5.Create();
+
+            var cursorDecoded = cursor == null ? "" : System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(cursor));
+            var range = RandomProduct.GetVisibleProductNumberRange(keyword, cursorDecoded, 1, 200000);
+
+
+            for (var x = 0; x < 1; x++)
+            {
+                res.Clear();
+
+
+                for (var productNumber = range.first; productNumber <= Math.Min(range.first + take - 1, range.last); productNumber++)
+                {
+                    var rnd = new Random(productNumber);
+                    var name = RandomProduct.NumberToProductName(productNumber, 1, 200000);
+                    if (name != null)
+                    {
+                        var id = new Guid(md5.ComputeHash(Encoding.Default.GetBytes(name)));//cikknévből generált guid. Nem jó megoldás, de teszthez megfelel
+                        var p = new Product()
+                        {
+                            //Id = Guid.NewGuid(),
+                            Id = id,
+                            Name = name,
+                            Price = rnd.Next(5000) + 100,
+                            Stock = rnd.Next(2) * (rnd.Next(5) * rnd.Next(5) + rnd.Next(5)),
+                            Description = RandomProduct.RandomSentences(rnd.Next(5, 10), rnd.Next(3, 10), rnd),
+                        };
+                        res.Add(p);
+                    }
+                }
+            }
+            return res;
+        }
         public static string? NumberToProductName(int productNumber, int firstProductNumber, int lastProductNumber)
         {
             var rnd = new Random(productNumber);

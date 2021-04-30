@@ -8,11 +8,6 @@ namespace BackendSimulator
     public class Product
     {
         public Guid Id { get; set; }
-        /// <summary>
-        /// Tenant id
-        /// </summary>
-        public Guid TenantId { get; set; }
-        
         public string Name { get; set; } = null!;
         public double Price { get; set; }
         public double Stock { get; set; }
