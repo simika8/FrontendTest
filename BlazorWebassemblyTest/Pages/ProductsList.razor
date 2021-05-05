@@ -1,8 +1,9 @@
 ﻿@page "/productslist"
 @inject HttpClient Http
+@inject IJSRuntime JS;
 @using BackendSimulator
 
-<input class="Input2" id="Input2" type="search"/>
+
 <input class="Input" id="Input" type="search" @bind-value="Filter" @bind-value:event="oninput" placeholder="search" @onkeydown="KeyboardEventHandler" />
 @System.Text.Json.JsonSerializer.Serialize(_filterLog);
 @if (forecasts == null)
@@ -17,7 +18,7 @@ else
 {
     //<input ref=@{(input) => { this.nameInput = input; }}  className="search" placeholder="Keresés" value={this.state.searchfilter} onChange={(e) => {this.refilter(e.target.value);}} onKeyDown={this.handleKeyDown} />
 
-    <div className="tbodyscroll">
+    <div class="tbodyscroll">
 
         <table class="table">
             <thead>
@@ -37,10 +38,10 @@ else
                     {
                         var cursorRef = actLineNumber == cursor;
                         var imgsrc = ApiBaseUrl + "/api/Pictures?productId=" + product.Id + "&minTimeMs=50&maxTimeMs=3000";
-                        <tr class=@(cursorRef ? "cursor" : null)>
+                        <tr class=@(cursorRef ? "cursor" : null) id=@(cursorRef ? "cursorselected" : null)>
                             <td>
-                                <div className="pic100">
-                                    <img src=@imgsrc alt=@product.Name />
+                                <div >
+                                    <img class="pic100" src=@imgsrc alt=@product.Name />
                                 </div>
                             </td>
                             <td>@product.Name</td>
@@ -83,7 +84,7 @@ else
             cursor++;
         if (args.Key == "ArrowUp")
             cursor--;
-
+        ScrollToElementId("cursorselected");
     }
 
     private async Task ReQuery()
@@ -97,7 +98,7 @@ else
         else
         {
             //forecasts = await Http.GetFromJsonAsync<ApiResultWithPaging<IEnumerable<Product>>>(ApiBaseUrl + "/api/Products?keyword=" + Filter + "&take=8&minTimeMs=1&maxTimeMs=100");
-            forecasts = await Http.GetFromJsonAsync<ApiResultWithPaging<IEnumerable<Product>>>(ApiBaseUrl + "/api/Products?keyword=" + Filter + "&take=8&minTimeMs=0&maxTimeMs=00");
+            forecasts = await Http.GetFromJsonAsync<ApiResultWithPaging<IEnumerable<Product>>>(ApiBaseUrl + "/api/Products?keyword=" + Filter + "&take=20&minTimeMs=0&maxTimeMs=00");
             cursor = -1;
             _filterLog.Add(Filter);
             StateHasChanged();
@@ -107,7 +108,27 @@ else
             //System.IO.File.WriteAllText($@"c:\Develop\Puppeteer\log{new Guid().ToString()}.txt", Filter);
 
         }
+    }
 
+
+    private MarkupString convertedText =
+        new MarkupString("Select the <b>Convert Array</b> button.");
+
+    private uint[] quoteArray = new uint[]
+        {
+            60, 101, 109, 62, 67, 97, 110, 39, 116, 32, 115, 116, 111, 112, 32,
+            116, 104, 101, 32, 115, 105, 103, 110, 97, 108, 44, 32, 77, 97,
+            108, 46, 60, 47, 101, 109, 62, 32, 45, 32, 77, 114, 46, 32, 85, 110,
+            105, 118, 101, 114, 115, 101, 10, 10,
+                    };
+
+
+    private async Task ScrollToElementId(string elementId)
+    {
+        var res = await JS.InvokeAsync<bool>("window.scrollToElementId", elementId);
+        ;
+        //return true;
+        //return JS.InvokeAsync<bool>("window.scrollToElementId", elementId).GetAwaiter().GetResult();
     }
 
 }

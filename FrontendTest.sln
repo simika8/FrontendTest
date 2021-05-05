@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30330.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendSimulator", "BackendSimulator\BackendSimulator.csproj", "{6EEF7E19-B12D-4425-AE57-78DDDE9B1857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebassemblyTest", "BlazorWebassemblyTest\BlazorWebassemblyTest.csproj", "{4EE86617-86F5-49BE-857A-AA7F46FCBFE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebassemblyTest", "BlazorWebassemblyTest\BlazorWebassemblyTest.csproj", "{4EE86617-86F5-49BE-857A-AA7F46FCBFE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerTest", "..\BlazorServerTest\BlazorServerTest.csproj", "{AE796187-39DE-4E9A-8666-1219527E0525}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerTest", "..\BlazorServerTest\BlazorServerTest.csproj", "{AE796187-39DE-4E9A-8666-1219527E0525}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactTest", "ReactTest\ReactTest.csproj", "{C1924312-8271-497A-B72E-4767661221E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{AE796187-39DE-4E9A-8666-1219527E0525}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE796187-39DE-4E9A-8666-1219527E0525}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE796187-39DE-4E9A-8666-1219527E0525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1924312-8271-497A-B72E-4767661221E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1924312-8271-497A-B72E-4767661221E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1924312-8271-497A-B72E-4767661221E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1924312-8271-497A-B72E-4767661221E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

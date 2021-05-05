@@ -9,6 +9,21 @@
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="BlazorWebassemblyTest.styles.css" rel="stylesheet" />
+    <link href="css/search.css" rel="stylesheet" />
+
+    <script>
+        window.scrollToElementId = (elementId) => {
+            //console.info('scrolling to element', elementId);
+            var element = document.getElementById(elementId);
+            if (!element) {
+                //console.warn('element was not found', elementId);
+                return false;
+            }
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+            //console.info('scrolled to element', elementId);
+            return true;
+        }
+    </script>
 </head>
 
 <body>
