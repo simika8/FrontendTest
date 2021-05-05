@@ -19,7 +19,8 @@
                 //console.warn('element was not found', elementId);
                 return false;
             }
-            element.scrollIntoView({ behavior: "smooth", block: "center" });
+            //element.scrollIntoView({ behavior: "smooth", block: "center" });
+            element.scrollIntoView({ behavior: "auto", block: "nearest" });
             //console.info('scrolled to element', elementId);
             return true;
         }

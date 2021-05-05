@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerTest", "..\Blaz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactTest", "ReactTest\ReactTest.csproj", "{C1924312-8271-497A-B72E-4767661221E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebassemblySyncfusionTest", "BlazorWebassemblySyncfusionTest\BlazorWebassemblySyncfusionTest.csproj", "{C451C525-72FC-46E6-AFE1-16ED5996775B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C1924312-8271-497A-B72E-4767661221E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1924312-8271-497A-B72E-4767661221E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1924312-8271-497A-B72E-4767661221E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C451C525-72FC-46E6-AFE1-16ED5996775B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C451C525-72FC-46E6-AFE1-16ED5996775B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C451C525-72FC-46E6-AFE1-16ED5996775B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C451C525-72FC-46E6-AFE1-16ED5996775B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

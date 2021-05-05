@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BlazorWebassemblySyncfusionTest</title>
+    <base href="/" />
+    <link href="_content/Syncfusion.Blazor.Themes/bootstrap4.css" rel="stylesheet" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="BlazorWebassemblySyncfusionTest.styles.css" rel="stylesheet" />
+    <script>
+        window.focus = (element) => {
+            element.focus();
+            return true;
+        }
+    </script>
+    <script>
+        window.focusToElementId = (elementId) => {
+            var element = document.getElementById(elementId);
+            if (!element) {
+                console.warn('element was not found', elementId);
+                return false;
+            }
+            console.info('focus to element', elementId);
+            element.focus();
+            console.info('focused to element', elementId);
+            return true;
+        }
+    </script>
+    <script>
+        window.scrollToElement = (element) => {
+            element.scrollIntoView({ behavior: "auto", block: "nearest" });
+            return true;
+        }
+    </script>
+    <script>
+        window.scrollToElementId = (elementId) => {
+            console.info('scrolling to element', elementId);
+            var element = document.getElementById(elementId);
+            if (!element) {
+                console.warn('element was not found', elementId);
+                return false;
+            }
+            element.scrollIntoView({ behavior: "auto", block: "nearest" });
+            console.info('scrolled to element', elementId);
+            return true;
+        }
+    </script>
+    <script>
+        window.scrollToElement2 = (elementId) => {
+            console.warn('scrolled to element xx');
+            var element = document.querySelector('[aria-selected="true"]');
+            if (!element) {
+                console.warn('element was not found');
+                return false;
+            }
+            //element.scrollIntoView({ behavior: "smooth", block: "center" });
+            element.scrollIntoView({ behavior: "auto", block: "nearest" });
+            return true;
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="app">Loading...</div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+</body>
+
+</html>

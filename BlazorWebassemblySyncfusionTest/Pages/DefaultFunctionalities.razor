@@ -1,0 +1,202 @@
+﻿@page "/default"
+
+@inject IJSRuntime JsRuntime
+@inject HttpClient Http
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using blazor_griddata
+
+@using BackendSimulator
+
+@*<button class="btn btn-primary" @onclick="OnClick">Click me</button>
+*@
+<span class="e-input-group e-control-wrapper e-control-container" style="width:;" _bl_5="">
+        <input @ref="inputElement" class="e-control e-textbox e-lib e-input" id="Input" type="search"
+               @bind-value="Filter" @bind-value:event="oninput" placeholder="search" 
+               @onkeydown="KeyboardEventHandler" @onkeydown:preventDefault="@IsPreventKey"
+               @onkeyup="KeyboardEventHandler" @onkeypress="KeyboardEventHandler"
+               autocomplete ="off" />
+    </span>
+
+@*<span class="e-input-group e-control-wrapper e-control-container" style="width:;" _bl_4="">
+    <input id="textbox-6556a8ab-86d4-4e58-b99c-73fbf268ace8" class="e-control e-textbox e-lib e-input"
+           name="textbox-6556a8ab-86d4-4e58-b99c-73fbf268ace8" role="textbox" tabindex="0" type="text"
+           placeholder="search" aria-placeholder="search" autocomplete="on" aria-disabled="false" _bl_5="">
+</span>
+*@
+
+@*<SfTextBox Placeholder='search' @bind-Value="@Filter" Input="OnInput" @onkeydown="KeyboardEventHandler" @ref="refSfTextBox" Created="OnCreated"></SfTextBox>
+*@
+
+<SfGrid DataSource="@GridData" Height="410" Width="auto" AllowPaging="false" AllowSelection="true" @ref="SfGrid">
+</SfGrid>
+
+
+
+@code{
+    private ApiResultWithPaging<IEnumerable<Product>> forecasts;
+    public List<Product> GridData { get; set; }
+    private bool IsPreventKey { get; set; }
+
+    //protected ElementReference myRef;
+    protected Syncfusion.Blazor.Inputs.SfTextBox refSfTextBox;
+    protected Syncfusion.Blazor.Grids.SfGrid<Product> SfGrid;
+    private ElementReference inputElement { get; set; }
+
+    private string ApiBaseUrl = "https://backendsimulator.azurewebsites.net";
+
+    private string _filter;
+    private List<string> _filterLog = new List<string>();
+
+    public string Filter { get { return _filter; } set { _filter = value; ReQuery(); } }
+
+    private int cursor = -1;
+
+
+    private async Task OnClick()
+    {
+        var res = await JsRuntime.InvokeAsync<bool>("focus", inputElement);
+        //var res2 = await JsRuntime.InvokeAsync<bool>("window.focusToElementId", myRef2.ID);
+        //await SfGrid.FocusAsync();
+        //await SfGrid.SelectRow(15);
+        //var srows = SfGrid.SelectedRowIndex;
+
+
+        //var res = await JsRuntime.InvokeAsync<bool>("scrollToElement2", inputElement);
+        //var ff = SfGrid.field
+        //var a = await SfGrid.GetUidByColumnField();
+
+
+        ;
+        //var row = await SfGrid.Get GetPersistData();
+        //Syncfusion.Blazor.DOM dom = SfGrid.g
+        ;
+        //await SfGrid.SelectCell((2, 2));
+        //var srows = SfGrid.SelectedRowIndex;
+        //var row = await SfGrid.SelectRowsGetDataRows();
+        //var SelectedRowIndex = (await SfGrid.GetSelectedRowIndexes()).First();
+
+
+
+        ;
+        //var row = srows.First();
+        //var res = await JsRuntime.InvokeAsync<bool>("focus", inputElement);
+        //var res = await JsRuntime.InvokeAsync<bool>("scrollToElement", inputElement);
+        //var res = await JsRuntime.InvokeAsync<bool>("scrollToElement", row);
+        ;
+    }
+
+    public async Task OnCreated(Object args)
+    {
+
+        //refSfTextBox.FocusIn();
+    }
+    public async Task OnInput(InputEventArgs args)
+    {
+        Filter = args.Value;
+        await ReQuery();
+        //this.StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GridData = new List<Product>();
+        await ReQuery();
+    }
+
+    protected async override void OnAfterRender(bool firstRender)
+    {
+        ;
+        //await JsRuntime.InvokeVoidAsync("sfBlazorSB.inputFocus", inputElement);
+        //myRef2.FocusIn();
+        //await JsRuntime.InvokeVoidAsync("sfBlazorSB.inputFocus", );
+        ;
+        //var res = await JsRuntime.InvokeAsync<bool>("window.focus", inputElement);
+        //var res2 = await JsRuntime.InvokeAsync<bool>("window.focusToElementId", myRef2.ID);
+
+
+
+        var res2 = await JsRuntime.InvokeAsync<bool>("scrollToElement2", inputElement);
+        if (firstRender)
+        {
+            var res = await JsRuntime.InvokeAsync<bool>("focus", inputElement);
+        }
+    }
+
+
+    private async Task KeyboardEventHandler(KeyboardEventArgs args)
+    {
+        double cur;
+        if (SfGrid.SelectedRowIndexes.Count > 0)
+            cur = SfGrid.SelectedRowIndexes.FirstOrDefault();
+        else
+            cur = -1;
+
+        /*var maxcur = SfGrid.TotalItemCount;
+        cur++;
+        cur = Math.Min()*/
+
+        var KeyPressed = "Key Pressed is " + args.Key;
+        var EventInfo = "Event Type " + args.Type;
+        switch (args.Key)
+        {
+            case "ArrowDown":
+                cur++;
+                break;
+            case "ArrowUp":
+                cur--;
+                break;
+            default:
+                this.IsPreventKey = false;
+                return;
+        }
+        this.IsPreventKey = true;
+
+        cur = Math.Max(cur, 0);
+        cur = Math.Min(cur, SfGrid.TotalItemCount - 1);
+        //ScrollToElementId("cursorselected");
+
+        //await SfGrid.FocusAsync();
+        await SfGrid.SelectRow(cur);
+        //StateHasChanged();
+        //var srows = SfGrid.SelectedRowIndex;
+
+    }
+
+    private async Task ReQuery()
+    {
+        forecasts = null;
+        GridData = new List<Product>();
+        cursor = -1;
+        StateHasChanged();
+        if (string.IsNullOrWhiteSpace(Filter))
+        {
+        }
+        else
+        {
+            //forecasts = await Http.GetFromJsonAsync<ApiResultWithPaging<IEnumerable<Product>>>(ApiBaseUrl + "/api/Products?keyword=" + Filter + "&take=8&minTimeMs=1&maxTimeMs=100");
+            forecasts = await Http.GetFromJsonAsync<ApiResultWithPaging<IEnumerable<Product>>>(ApiBaseUrl + "/api/Products?keyword=" + Filter + "&take=20&minTimeMs=0&maxTimeMs=00");
+            GridData = forecasts.Data.ToList();
+            cursor = -1;
+            _filterLog.Add(Filter);
+            StateHasChanged();
+
+            //using var f = System.IO.File.AppendText(@"c:\Develop\Puppeteer\log.txt");
+            //f.WriteLine(Filter);
+            //System.IO.File.WriteAllText($@"c:\Develop\Puppeteer\log{new Guid().ToString()}.txt", Filter);
+
+        }
+    }
+
+
+
+    private async Task ScrollToElementId(string elementId)
+    {
+        //var res = await JsRuntime.InvokeAsync<bool>("window.focus", elementId);
+        ;
+        //return true;
+        //return JS.InvokeAsync<bool>("window.scrollToElementId", elementId).GetAwaiter().GetResult();
+    }
+
+
+}
