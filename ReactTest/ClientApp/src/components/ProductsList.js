@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios'
 import './search.css';
 
-
 import SalesList from './SalesList';
 import * as Constants from './constants';
 
